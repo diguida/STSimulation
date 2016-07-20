@@ -1,4 +1,4 @@
-#include "include/LinearCongruentialGenerator.h"
+#include "../include/LinearCongruentialGenerator.h"
 #include <iostream>
 
 int main( int argc, char** argv ) {
