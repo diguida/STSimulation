@@ -3,7 +3,7 @@
 
 class MIDTestDriver {
 public:
-  explicit MIDTestDriver( double tau ): m_tau( tau ) {}
+  explicit MIDTestDriver( double tau );
   double callMID() const;
   void setMeanTime( double tau );
   double getMeanTime() const;

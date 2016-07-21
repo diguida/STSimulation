@@ -1,13 +1,10 @@
 # Include dir: folder where header files are stored
 IDIR =../include
 
-# Executable file
-EXEC = test_LinearCongruentialGenerator
-
 # Source code files that must be linked
 # to create the executable
 CXX_SOURCES = ../src/LinearCongruentialGenerator.cpp \
-              test_LinearCongruentialGenerator.cpp
+              ../src/MIDStub.cpp
 
 # Object files are the same as source files,
 # but with all the .cpp suffixes replaced with .o
@@ -26,8 +23,23 @@ CXXFLAGS = -std=c++11 -Wall
 # Linker
 CC = $(CXX)
 
+# all is the default rule
+all: testsuite
 
 # The executable depends on the object files
 # It is made automagically using the LDFLAGS and LOADLIBES variables.
 # The .o files are made automagically using the CXXFLAGS variable.
-$(EXEC): $(OBJECTS)
+
+# Executable files for tests
+CXX_EXECS = test_LinearCongruentialGenerator.cpp \
+            test_MIDStub.cpp
+
+TESTS = test_LinearCongruentialGenerator \
+        test_MIDStub
+
+testsuite: $(TESTS)
+
+test_LinearCongruentialGenerator: test_LinearCongruentialGenerator.o $(OBJECTS)
+
+test_MIDStub: test_MIDStub.o $(OBJECTS)
+

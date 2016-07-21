@@ -4,7 +4,7 @@ MIDTestDriver::MIDTestDriver( double tau ):
   m_tau( tau ) {}
 
 double MIDTestDriver::callMID() const {
-  return 0.;
+  return MIDStub::execute( m_tau );
 }
 
 void MIDTestDriver::setMeanTime( double tau ) {

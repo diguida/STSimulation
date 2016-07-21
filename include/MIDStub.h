@@ -6,13 +6,14 @@
 
 class MIDStub {
 public:
-  explicit MIDStub( unsigned long long seed );
+  static constexpr unsigned long long seed = 57;
+  static LinearCongruentialGenerator lcg;
+  MIDStub() = default;
   template<typename U>
-  double execute( U&& value ) {
-    return m_lcg.exp( std::forward<U>( value ) );
+  static double execute( U&& value ) {
+    return lcg.exp( std::forward<U>( value ) );
   }
-private:
-  LinearCongruentialGenerator m_lcg;
+
 };
 
 #endif
