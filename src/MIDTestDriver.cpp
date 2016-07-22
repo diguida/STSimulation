@@ -1,4 +1,5 @@
 #include "../include/MIDTestDriver.h"
+#include "../include/MIDStub.h"
 
 MIDTestDriver::MIDTestDriver( double tau ):
   m_tau( tau ) {}
