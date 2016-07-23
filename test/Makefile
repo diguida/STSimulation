@@ -3,9 +3,8 @@ IDIR =../include
 
 # Source code files that must be linked
 # to create the executable
-CXX_SOURCES = ../src/LinearCongruentialGenerator.cpp \
-              ../src/MIDStub.cpp \
-              ../src/MIDTestDriver.cpp
+CXX_SOURCES = ../src/LinearCongruentialGenerator.cpp #\
+#              ../src/MIDTestDriver.cpp
 
 # Object files are the same as source files,
 # but with all the .cpp suffixes replaced with .o
@@ -37,8 +36,8 @@ CXX_EXECS = test_LinearCongruentialGenerator.cpp \
             test_MIDTestDriver.cpp
 
 TESTS = test_LinearCongruentialGenerator \
-        test_MIDStub \
-        test_MIDTestDriver
+        test_MIDStub #\
+#        test_MIDTestDriver
 
 testsuite: $(TESTS)
 
