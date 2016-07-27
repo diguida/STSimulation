@@ -35,6 +35,8 @@ CXX_EXECS = test_LinearCongruentialGenerator.cpp \
             test_MIDStub.cpp \
             test_MIDTestDriver.cpp
 
+O_EXECS = $(CXX_EXECS:.cpp=.o)
+
 TESTS = test_LinearCongruentialGenerator \
         test_MIDStub #\
 #        test_MIDTestDriver
@@ -46,3 +48,8 @@ test_LinearCongruentialGenerator: test_LinearCongruentialGenerator.o $(OBJECTS)
 test_MIDStub: test_MIDStub.o $(OBJECTS)
 
 test_MIDTestDriver: test_MIDTestDriver.o $(OBJECTS)
+
+.PHONY: clean
+
+clean:
+	$(RM) $(OBJECTS) $(O_EXECS) $(TESTS)
