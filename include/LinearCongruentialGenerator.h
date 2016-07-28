@@ -5,7 +5,7 @@
 
 class LinearCongruentialGenerator {
 public:
-  static constexpr unsigned long long m = 2147483648; //the modulus is set to 2^31
+  static constexpr unsigned long long m = 1ULL << 31; //the modulus is set to 2^31
   //static constexpr double inverse_m = (double) 1/m;
   // the value of the multiplier guarantees maximum period
   // and allows to pass tests for randomness.

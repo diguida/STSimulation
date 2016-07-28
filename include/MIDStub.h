@@ -16,13 +16,14 @@ public:
     m_lce( new engine_type( seed ) ) {}
   template<typename U>
   auto execute( U&& lambda ) -> typename std::decay<decltype(lambda)>::type {
-    //typename decltype(lambda) == double&
-    //typename std::decay<decltype(lambda)>::type == double;
+    // assuming the type of lambda is double:
+    // * decltype(lambda) is double&
+    // * std::decay<decltype(lambda)>::type is double;
     std::exponential_distribution<> d( std::forward<U>( lambda ) );
     return d( *m_lce );
   }
 private:
-  std::unique_ptr< engine_type > m_lce; 
+  std::shared_ptr< engine_type > m_lce; 
 };
 
 #endif

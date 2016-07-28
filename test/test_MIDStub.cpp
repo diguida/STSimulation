@@ -5,11 +5,11 @@
 
 int main( int argc, char** argv ) {
   unsigned long long seed = 57;
-  LinearCongruentialGenerator lcg( seed ), lcg2( seed );
+  LinearCongruentialGenerator lcg( seed ), lcg1( seed ), lcg2( seed ), lcg3( seed );
   MIDStub< unsigned long long,
            LinearCongruentialGenerator::a,
            LinearCongruentialGenerator::c,
-           LinearCongruentialGenerator::m > stub ( seed );
+           LinearCongruentialGenerator::m > stub( seed );
   double tau = 127.;
   double lambda = 1./tau;
   //first try
@@ -19,11 +19,11 @@ int main( int argc, char** argv ) {
   }
   for( unsigned int i = 0; i < 10; ++i ) {
     lcg.random();
-    lcg2.random();
+    lcg1.random();
     double r = lcg.random();
     double exp_r = - tau * std::log( r );
     double exp1_r = - tau * std::log( 1. - r );
-    double exp_s = lcg2.exp( tau );
+    double exp_s = lcg1.exp( tau );
     std::cout << "Random exp_r: " << exp_r
               << ", exp_s: " << exp_s
               << ", exp1_r: " << exp1_r
@@ -35,26 +35,46 @@ int main( int argc, char** argv ) {
     double t = stub.execute( lambda );
     std::cout << "Stub execution time: " << t << std::endl;
     lcg.random();
-    lcg2.random();
+    lcg1.random();
     double r = lcg.random();
     double exp_r = - tau * std::log( r );
     double exp1_r = - tau * std::log( 1. - r );
-    double exp_s = lcg2.exp( tau );
+    double exp_s = lcg1.exp( tau );
     std::cout << "Random exp_r: " << exp_r
               << ", exp_s: " << exp_s
               << ", exp1_r: " << exp1_r
               << std::endl;
   }
-  /*
-  //instantiating another stub the random number sequence continues
-  MIDStub stub2;
-  for( unsigned int i = 0; i < 10; ++i ) {
-    double t = stub2.execute( 127 );
-    std::cout << "Stub execution time: " << t << std::endl;
-    double exp_r = lcg.exp( 127 );
-    std::cout << "Random exp: " << exp_r << std::endl;
-  }
 
+  // instantiating another stub:
+  // the random number sequence continues
+  MIDStub< unsigned long long,
+           LinearCongruentialGenerator::a,
+           LinearCongruentialGenerator::c,
+           LinearCongruentialGenerator::m > stub2( seed );
+  for( unsigned int i = 0; i < 10; ++i ) {
+    double t = stub2.execute( lambda );
+    std::cout << "Second stub execution time: " << t << std::endl;
+    lcg.random();
+    lcg1.random();
+    double exp1_r = - tau * std::log( 1. - lcg.random() );
+    lcg1.random();
+    std::cout << "First random exp: " << exp1_r << std::endl;
+    lcg2.random();
+    exp1_r = - tau * std::log( 1. - lcg2.random() );
+    std::cout << "Second random exp: " << exp1_r << std::endl;
+    t = stub.execute( lambda );
+    std::cout << "First stub execution time: " << t << std::endl;
+    lcg.random();
+    lcg1.random();
+    exp1_r = - tau * std::log( 1. - lcg.random() );
+    lcg1.random();
+    std::cout << "First random exp: " << exp1_r << std::endl;
+    lcg2.random();
+    exp1_r = - tau * std::log( 1. - lcg2.random() );
+    std::cout << "Second random exp: " << exp1_r << std::endl;
+  }
+  /*
   //while with a new generator we restart from the beginning
   LinearCongruentialGenerator lcg2( MIDStub::seed );
   for( unsigned int i = 0; i < 10; ++i ) {
