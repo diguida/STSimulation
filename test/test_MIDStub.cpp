@@ -2,19 +2,21 @@
 #include "../include/MIDStub.h"
 #include <cmath>
 #include <iostream>
+#include <memory>
 
 int main( int argc, char** argv ) {
   unsigned long long seed = 57;
   LinearCongruentialGenerator lcg( seed ), lcg1( seed ), lcg2( seed ), lcg3( seed );
-  MIDStub< unsigned long long,
-           LinearCongruentialGenerator::a,
-           LinearCongruentialGenerator::c,
-           LinearCongruentialGenerator::m > stub( seed );
+  using MS = MIDStub< unsigned long long,
+                      LinearCongruentialGenerator::a,
+                      LinearCongruentialGenerator::c,
+                      LinearCongruentialGenerator::m >;
+  std::shared_ptr<MS> stub = std::make_shared<MS>( seed );
   double tau = 127.;
   double lambda = 1./tau;
   //first try
   for( unsigned int i = 0; i < 10; ++i ) {
-    double t = stub.execute( lambda );
+    double t = stub->execute( lambda );
     std::cout << "Stub execution time: " << t << std::endl;
   }
   for( unsigned int i = 0; i < 10; ++i ) {
@@ -32,7 +34,7 @@ int main( int argc, char** argv ) {
   
   //second try
   for( unsigned int i = 0; i < 10; ++i ) {
-    double t = stub.execute( lambda );
+    double t = stub->execute( lambda );
     std::cout << "Stub execution time: " << t << std::endl;
     lcg.random();
     lcg1.random();
@@ -46,14 +48,12 @@ int main( int argc, char** argv ) {
               << std::endl;
   }
 
-  // instantiating another stub:
+  // instantiating another stub
+  // by copy constructing the shared pointer:
   // the random number sequence continues
-  MIDStub< unsigned long long,
-           LinearCongruentialGenerator::a,
-           LinearCongruentialGenerator::c,
-           LinearCongruentialGenerator::m > stub2( seed );
+  std::shared_ptr<MS> stub2 = stub;
   for( unsigned int i = 0; i < 10; ++i ) {
-    double t = stub2.execute( lambda );
+    double t = stub2->execute( lambda );
     std::cout << "Second stub execution time: " << t << std::endl;
     lcg.random();
     lcg1.random();
@@ -63,7 +63,7 @@ int main( int argc, char** argv ) {
     lcg2.random();
     exp1_r = - tau * std::log( 1. - lcg2.random() );
     std::cout << "Second random exp: " << exp1_r << std::endl;
-    t = stub.execute( lambda );
+    t = stub->execute( lambda );
     std::cout << "First stub execution time: " << t << std::endl;
     lcg.random();
     lcg1.random();
