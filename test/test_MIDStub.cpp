@@ -11,12 +11,12 @@ int main( int argc, char** argv ) {
                       LinearCongruentialGenerator::a,
                       LinearCongruentialGenerator::c,
                       LinearCongruentialGenerator::m >;
-  std::shared_ptr<MS> stub = std::make_shared<MS>( seed );
+  std::shared_ptr<MS> p_stub = std::make_shared<MS>( seed );
   double tau = 127.;
   double lambda = 1./tau;
   //first try
   for( unsigned int i = 0; i < 10; ++i ) {
-    double t = stub->execute( lambda );
+    double t = p_stub->execute( lambda );
     std::cout << "Stub execution time: " << t << std::endl;
   }
   for( unsigned int i = 0; i < 10; ++i ) {
@@ -34,7 +34,7 @@ int main( int argc, char** argv ) {
   
   //second try
   for( unsigned int i = 0; i < 10; ++i ) {
-    double t = stub->execute( lambda );
+    double t = p_stub->execute( lambda );
     std::cout << "Stub execution time: " << t << std::endl;
     lcg.random();
     lcg1.random();
@@ -51,9 +51,9 @@ int main( int argc, char** argv ) {
   // instantiating another stub
   // by copy constructing the shared pointer:
   // the random number sequence continues
-  std::shared_ptr<MS> stub2 = stub;
+  std::shared_ptr<MS> p_stub2 = p_stub;
   for( unsigned int i = 0; i < 10; ++i ) {
-    double t = stub2->execute( lambda );
+    double t = p_stub2->execute( lambda );
     std::cout << "Second stub execution time: " << t << std::endl;
     lcg.random();
     lcg1.random();
@@ -63,7 +63,7 @@ int main( int argc, char** argv ) {
     lcg2.random();
     exp1_r = - tau * std::log( 1. - lcg2.random() );
     std::cout << "Second random exp: " << exp1_r << std::endl;
-    t = stub->execute( lambda );
+    t = p_stub->execute( lambda );
     std::cout << "First stub execution time: " << t << std::endl;
     lcg.random();
     lcg1.random();
@@ -74,25 +74,26 @@ int main( int argc, char** argv ) {
     exp1_r = - tau * std::log( 1. - lcg2.random() );
     std::cout << "Second random exp: " << exp1_r << std::endl;
   }
-  /*
-  //while with a new generator we restart from the beginning
-  LinearCongruentialGenerator lcg2( MIDStub::seed );
+
+  // while with a new stub, allocated statically,
+  // we restart the random sequence from the beginning
+  MS stub3( seed );
   for( unsigned int i = 0; i < 10; ++i ) {
-    double t = stub2.execute( 127 );
+    double t = stub3.execute( lambda );
     std::cout << "Stub execution time: " << t << std::endl;
-    double exp_r = lcg.exp( 127 );
-    std::cout << "Random exp: " << exp_r << std::endl;
-    double exp_r2 = lcg2.exp( 127 );
-    std::cout << "Random exp2: " << exp_r2 << std::endl;
+    lcg3.random();
+    double exp1_r = - tau * std::log( 1. - lcg3.random() );
+    std::cout << "Random exp: " << exp1_r << std::endl;
+  }
+  // the copy preserves the random sequence
+  MS stub4 = stub3;
+  for( unsigned int i = 0; i < 10; ++i ) {
+    double t = stub4.execute( lambda );
+    std::cout << "Stub execution time: " << t << std::endl;
+    lcg3.random();
+    double exp1_r = - tau * std::log( 1. - lcg3.random() );
+    std::cout << "Random exp: " << exp1_r << std::endl;
   }
 
-  //actually, we can use a static class methods...
-  for( unsigned int i = 0; i < 10; ++i ) {
-    double t = MIDStub::execute( 127 );
-    std::cout << "Stub execution time: " << t << std::endl;
-    double exp_r = lcg.exp( 127 );
-    std::cout << "Random exp: " << exp_r << std::endl;
-  }
-  */
   return 0;
 }

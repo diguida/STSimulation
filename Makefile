@@ -7,8 +7,7 @@ TESTDIR = test
 
 # Source code files that must be linked
 # to create the executable
-_CXX_SOURCES = LinearCongruentialGenerator.cpp #\
-#              MIDTestDriver.cpp
+_CXX_SOURCES = LinearCongruentialGenerator.cpp
 CXX_SOURCES = $(patsubst %,$(SRCDIR)/%,$(_CXX_SOURCES))
 
 # Object files are the same as source files,
@@ -22,8 +21,8 @@ HEADERS = $(patsubst %,$(IDIR)/%,$(_HEADERS))
 
 # Source files for tests
 _CXX_TESTSOURCES = test_LinearCongruentialGenerator.cpp \
-                   test_MIDStub.cpp #\
-#                   test_MIDTestDriver.cpp
+                   test_MIDStub.cpp \
+                   test_MIDTestDriver.cpp
 CXX_TESTSOURCES = $(patsubst %,$(TESTDIR)/%,$(_CXX_TESTSOURCES))
 
 O_TESTSOURCES = $(CXX_TESTSOURCES:.cpp=.o)
