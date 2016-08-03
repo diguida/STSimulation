@@ -15,7 +15,8 @@ CXX_SOURCES = $(patsubst %,$(SRCDIR)/%,$(_CXX_SOURCES))
 OBJECTS = $(CXX_SOURCES:.cpp=.o)
 
 # Header files
-_HEADERS = LinearCongruentialGenerator.h \
+_HEADERS = LinearCongruentialGeneratorParameters.h \
+           LinearCongruentialGenerator.h \
            MIDStub.h \
            MIDTestDriver.h
 HEADERS = $(patsubst %,$(IDIR)/%,$(_HEADERS))

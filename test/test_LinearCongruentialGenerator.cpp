@@ -3,15 +3,17 @@
 #include <iostream>
 #include <random>
 
+using Pars = LinearCongruentialGeneratorParameters;
+
 int main( int argc, char** argv ) {
   unsigned long long seed = 57;
   LinearCongruentialGenerator lcg( seed ), lcg2( seed );
   std::linear_congruential_engine< unsigned long long,
-                                   LinearCongruentialGenerator::a,
-                                   LinearCongruentialGenerator::c,
-                                   LinearCongruentialGenerator::m > lce( seed ),
-                                                                    lce2( seed ), lce3( seed ), lce4( seed ),
-                                                                    lce5( seed ), lce6( seed ), lce7( seed );
+                                   Pars::a,
+                                   Pars::c,
+                                   Pars::m > lce( seed ),
+                                             lce2( seed ), lce3( seed ), lce4( seed ),
+                                             lce5( seed ), lce6( seed ), lce7( seed );
   std::uniform_real_distribution<> dis;
   for( unsigned int i = 0; i < 10; ++i ) {
     unsigned long long x = lce();

@@ -3,6 +3,7 @@
 #include <iostream>
 #endif
 
+using Pars = LinearCongruentialGeneratorParameters;
 LinearCongruentialGenerator::LinearCongruentialGenerator( unsigned long long seed ):
   m_seed( seed ),
   m_x( seed ) {}
@@ -16,8 +17,8 @@ double LinearCongruentialGenerator::random() {
 #if DEBUG
   std::cout << "[LinearCongruentialGenerator::random] starting value = " << m_x << ", ";
 #endif
-  m_x = ( a * m_x ) % m;
-  double r = (double) m_x/m;
+  m_x = ( Pars::a * m_x + Pars::c ) % Pars::m;
+  double r = (double) m_x/Pars::m;
 #if DEBUG
   std::cout << "x = " << m_x << ", r = " << r << std::endl;
 #endif

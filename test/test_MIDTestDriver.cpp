@@ -3,22 +3,24 @@
 #include <functional>
 #include <iostream>
 
+using Pars = LinearCongruentialGeneratorParameters;
+
 int main( int argc, char** argv ) {
   unsigned long long seed = 57;
   double tau = 127.;
   double lambda = 1./tau;
   using LCE = std::linear_congruential_engine< unsigned long long,
-                                               LinearCongruentialGenerator::a,
-                                               LinearCongruentialGenerator::c,
-                                               LinearCongruentialGenerator::m >;
+                                               Pars::a,
+                                               Pars::c,
+                                               Pars::m >;
   using MS = MIDStub< unsigned long long,
-                      LinearCongruentialGenerator::a,
-                      LinearCongruentialGenerator::c,
-                      LinearCongruentialGenerator::m >;
+                      Pars::a,
+                      Pars::c,
+                      Pars::m >;
   using TD = MIDTestDriver< unsigned long long,
-                            LinearCongruentialGenerator::a,
-                            LinearCongruentialGenerator::c,
-                            LinearCongruentialGenerator::m >;
+                            Pars::a,
+                            Pars::c,
+                            Pars::m >;
   LCE lce{ seed };
   std::exponential_distribution<> d{ lambda };
   std::function<double()> rnd = std::bind( d, lce );

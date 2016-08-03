@@ -4,13 +4,15 @@
 #include <iostream>
 #include <memory>
 
+using Pars = LinearCongruentialGeneratorParameters;
+
 int main( int argc, char** argv ) {
   unsigned long long seed = 57;
   LinearCongruentialGenerator lcg( seed ), lcg1( seed ), lcg2( seed ), lcg3( seed );
   using MS = MIDStub< unsigned long long,
-                      LinearCongruentialGenerator::a,
-                      LinearCongruentialGenerator::c,
-                      LinearCongruentialGenerator::m >;
+                      Pars::a,
+                      Pars::c,
+                      Pars::m >;
   std::shared_ptr<MS> p_stub = std::make_shared<MS>( seed );
   double tau = 127.;
   double lambda = 1./tau;
