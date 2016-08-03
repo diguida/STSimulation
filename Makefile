@@ -40,7 +40,7 @@ CXX = g++
 # Pre-processor flags
 CPPFLAGS = -I$(IDIR)
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall
+CXXFLAGS = -std=c++14 -Wall
 # Linker
 CC = $(CXX)
 
