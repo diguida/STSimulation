@@ -36,8 +36,6 @@ int main(  int argc, char** argv ) {
   unsigned int initialFaults = 60;
   double lambda_preRun = 0.00785; //failures per hour
   std::size_t observations_preRun = 100;
-  std::vector<double> interfailureTimes_preRun;
-  interfailureTimes_preRun.reserve( observations_preRun );
   TD testDriver_preRun{ p_stub };
   testDriver_preRun.setRate( lambda_preRun );
   std::cout << "********************** PRE-RUN PHASE **********************\n"
@@ -50,7 +48,6 @@ int main(  int argc, char** argv ) {
   for( std::size_t i = 0; i < observations_preRun; ++i ) {
     std::cout << "Testing the MID: running up to failure " << i + 1 << std::endl;
     double t = testDriver_preRun.callMID();
-    interfailureTimes_preRun.push_back( t );
     preRunTime += t;
     std::cout << "Inter-failure time between failure " << i
               << " and " << i + 1
@@ -109,6 +106,6 @@ int main(  int argc, char** argv ) {
     std::cout << "Time spent in executing the MID till failure " << i + 1
               << ": " << runTime << std::endl;
   }
-
+  std::cout << "*** " << interfailureTimes.size() << ", " << failureTimes.size() << std::endl;
   return 0;
 }
