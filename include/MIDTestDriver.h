@@ -2,18 +2,12 @@
 #define include_MIDTestDriver_h
 
 #include <memory>
-#include <vector>
 #include "MIDStub.h"
 
-template < class UIntType,
-                 UIntType a,
-                 UIntType c,
-                 UIntType m >
+template < class Stub >
 class MIDTestDriver {
-  typedef MIDStub< UIntType, a, c, m > stub_type;
-
 public:
-  explicit MIDTestDriver( std::shared_ptr<stub_type> midstub ):
+  explicit MIDTestDriver( std::shared_ptr<Stub> midstub ):
     p_midstub( midstub )
   , m_lambda( 0. ) {}
 
@@ -30,7 +24,7 @@ public:
   }
 
 private:
-  std::shared_ptr<stub_type> p_midstub;
+  std::shared_ptr<Stub> p_midstub;
   double m_lambda;
 };
 

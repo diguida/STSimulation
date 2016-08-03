@@ -9,10 +9,7 @@ using MS = MIDStub< unsigned long long,
                     Pars::a,
                     Pars::c,
                     Pars::m >;
-using TD = MIDTestDriver< unsigned long long,
-                          Pars::a,
-                          Pars::c,
-                          Pars::m >;
+using TD = MIDTestDriver< MS >;
 
 int main(  int argc, char** argv ) {
   // Part 1: set up of the simulation:

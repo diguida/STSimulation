@@ -17,10 +17,7 @@ int main( int argc, char** argv ) {
                       Pars::a,
                       Pars::c,
                       Pars::m >;
-  using TD = MIDTestDriver< unsigned long long,
-                            Pars::a,
-                            Pars::c,
-                            Pars::m >;
+  using TD = MIDTestDriver< MS >;
   LCE lce{ seed };
   std::exponential_distribution<> d{ lambda };
   std::function<double()> rnd = std::bind( d, lce );
