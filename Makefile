@@ -16,7 +16,8 @@ OBJECTS = $(CXX_SOURCES:.cpp=.o)
 
 # Header files
 _HEADERS = LinearCongruentialGenerator.h \
-           MIDStub.h
+           MIDStub.h \
+           MIDTestDriver.h
 HEADERS = $(patsubst %,$(IDIR)/%,$(_HEADERS))
 
 # Source files for tests
@@ -42,6 +43,11 @@ CPPFLAGS = -I$(IDIR)
 CXXFLAGS = -std=c++11 -Wall
 # Linker
 CC = $(CXX)
+
+# Customising the default suffix rule for C++ sources
+# in order to compile also in case of changes in the headers
+%.o: %.cpp $(HEADERS)
+	$(COMPILE.cpp) $(OUTPUT_OPTION) $<
 
 # Test dir suffix rule
 %: $(TESTDIR)/%.o
