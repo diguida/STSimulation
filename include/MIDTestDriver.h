@@ -15,7 +15,7 @@ class MIDTestDriver {
 public:
   explicit MIDTestDriver( std::shared_ptr<stub_type> midstub ):
     p_midstub( midstub )
-  , m_lambda( 1. ) {}
+  , m_lambda( 0. ) {}
 
   double callMID() const {
     return p_midstub->execute( m_lambda );
