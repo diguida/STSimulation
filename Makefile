@@ -36,6 +36,11 @@ O_TESTSOURCES = $(CXX_TESTSOURCES:.cpp=.o)
 TESTS = $(_CXX_TESTSOURCES:.cpp=)
 TESTEXECS =  $(patsubst %,$(TESTDIR)/%,$(TESTS))
 
+# Executable file
+EXEC_SOURCE = STSimulation.cpp
+O_EXEC = $(EXEC_SOURCE:.cpp=.o)
+EXEC = $(EXEC_SOURCE:.cpp=)
+
 # Compiler
 CXX = g++
 # Pre-processor flags
@@ -55,11 +60,12 @@ CC = $(CXX)
 	$(LINK.o) $^ $(LOADLIBES) $(LDLIBS) -o $(TESTDIR)/$@
 
 # all is the default rule
-all: testsuite
+all: testsuite $(EXEC)
 
 # The executable depends on the object files
 # It is made automagically using the LDFLAGS and LOADLIBES variables.
 # The .o files are made automagically using the CXXFLAGS variable.
+$(EXEC): $(O_EXEC)
 
 testsuite: $(TESTS)
 
@@ -72,4 +78,4 @@ test_MIDTestDriver: $(TESTDIR)/test_MIDTestDriver.o $(OBJECTS)
 .PHONY: clean
 
 clean:
-	$(RM) $(OBJECTS) $(O_TESTSOURCES) $(TESTEXECS)
+	$(RM) $(OBJECTS) $(O_TESTSOURCES) $(TESTEXECS) $(O_EXEC) $(EXEC)
