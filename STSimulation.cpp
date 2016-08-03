@@ -1,8 +1,13 @@
-#include <iostream>
-#include <vector>
-
 #include "include/LinearCongruentialGeneratorParameters.h"
 #include "include/MIDTestDriver.h"
+
+#include <algorithm>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 using Pars = LinearCongruentialGeneratorParameters;
 using MS = MIDStub< unsigned long long,
@@ -10,6 +15,20 @@ using MS = MIDStub< unsigned long long,
                     Pars::c,
                     Pars::m >;
 using TD = MIDTestDriver< MS >;
+
+template< class T >
+static void vectorDump( T const & vec, std::string const & delimiter, std::string& dump ) {
+  std::ostringstream ss;
+  std::for_each( vec.cbegin(), vec.cend() - 1
+		 , [ &ss, &delimiter ]( typename T::value_type const & d ){ ss << d;
+                                                                            ss << delimiter;
+                                                                            }
+                 );
+  ss << *vec.crbegin();
+  dump += std::string( "[" );
+  dump += ss.str();
+  dump += std::string( "]" );
+}
 
 int main(  int argc, char** argv ) {
   // Part 1: set up of the simulation:
@@ -106,6 +125,19 @@ int main(  int argc, char** argv ) {
     std::cout << "Time spent in executing the MID till failure " << i + 1
               << ": " << runTime << std::endl;
   }
-  std::cout << "*** " << interfailureTimes.size() << ", " << failureTimes.size() << std::endl;
+
+  // Part 5: Output
+  // We create one file containing the lifetimes and the failure instants.
+  std::string dumpInterfailureTimes, dumpFailureTimes;
+  vectorDump( interfailureTimes, std::string( ", " ), dumpInterfailureTimes );
+  vectorDump( failureTimes, std::string( ", " ), dumpFailureTimes );
+  std::cout << "*********************** RUN RESULTS ***********************\n"
+            << "* Inter-failure times: " << dumpInterfailureTimes << "\n"
+            << "* Failure times: " << dumpFailureTimes << "\n"
+            << "***********************************************************"
+            << std::endl;
+  std::ofstream ofs("STResults.txt");
+  ofs << "T = " << dumpInterfailureTimes << "\nt = " << dumpFailureTimes;
+  ofs.close();
   return 0;
 }
