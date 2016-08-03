@@ -1,5 +1,6 @@
 #include "../include/LinearCongruentialGenerator.h"
 #include "../include/MIDStub.h"
+
 #include <cmath>
 #include <iostream>
 #include <memory>

@@ -1,8 +1,9 @@
 #ifndef include_MIDTestDriver_h
 #define include_MIDTestDriver_h
 
-#include <memory>
 #include "MIDStub.h"
+
+#include <memory>
 
 template < class Stub >
 class MIDTestDriver {

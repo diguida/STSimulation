@@ -1,4 +1,5 @@
 #include "../include/LinearCongruentialGenerator.h"
+
 #include <cmath>
 #include <iostream>
 #include <random>

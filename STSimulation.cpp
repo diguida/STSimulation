@@ -20,9 +20,9 @@ template< class T >
 static void vectorDump( T const & vec, std::string const & delimiter, std::string& dump ) {
   std::ostringstream ss;
   std::for_each( vec.cbegin(), vec.cend() - 1
-		 , [ &ss, &delimiter ]( typename T::value_type const & d ){ ss << d;
-                                                                            ss << delimiter;
-                                                                            }
+               , [ &ss, &delimiter ]( typename T::value_type const & d ){ ss << d;
+                                                                          ss << delimiter;
+                                                                          }
                  );
   ss << *vec.crbegin();
   dump += std::string( "[" );
@@ -30,14 +30,18 @@ static void vectorDump( T const & vec, std::string const & delimiter, std::strin
   dump += std::string( "]" );
 }
 
-int main(  int argc, char** argv ) {
-  // Part 1: set up of the simulation:
+int main( int argc, char** argv ) {
+  // Part 1: The set up of the simulation:
   // * definition of the Linear Congruential Generator:
-  //   We use the modulus, the multiplier, and the increment as
-  //   declared in the utility class LinearCongruentialGeneratorParameters,
-  //   then we set the seed
-  // * instantiation of the test stub: we use it as a service, and we enforce this by using the shared pointer interface;
-  // * instantiation of the test driver: it will use the shared stub to generate random numbers from the same sequence.
+  //   We use the modulus, the multiplier, and the increment as declared
+  //   in the utility class LinearCongruentialGeneratorParameters,
+  //   then we set the seed at runtime;
+  // * instantiation of the test stub:
+  //   we use it as a service, and we enforce this
+  //   by using the shared pointer interface;
+  // * instantiation of the test driver:
+  //   it will use the shared stub
+  //   to generate random numbers from the same sequence.
   unsigned long long seed = 57;
   std::shared_ptr<MS> p_stub = std::make_shared<MS>( seed );
   std::cout << "************************ GENERATOR ************************\n"
@@ -51,7 +55,9 @@ int main(  int argc, char** argv ) {
   // Part 2: The pre-run phase:
   // * the number of initial defects is initialFaults;
   // * the lifetime has an exponential distribution with fixed rate lambda_preRun;
-  // * the number of failure to be observed is observations_preRun; this is the number of random interfailure times to be produced iteratively via the test driver.
+  // * the number of failure to be observed is observations_preRun;
+  //   this is the number of random interfailure times
+  //   to be produced iteratively via the test driver.
   unsigned int initialFaults = 60;
   double lambda_preRun = 0.00785; //failures per hour
   std::size_t observations_preRun = 100;
@@ -76,7 +82,7 @@ int main(  int argc, char** argv ) {
   }
   std::cout << "Total time spent in the pre-run phase: " << preRunTime << " hours." << std::endl;
 
-  // Part 3: Extracting the rate of failure per faults:
+  // Part 3: The computation of the rate of failure per faults:
   // ratio between the number of observed failure in the pre-run phase
   // and the product of the initial faults and the time spent in the pre-run
   // phi_0 = observations_preRun / ( initialFaults * preRunTime )
@@ -87,12 +93,18 @@ int main(  int argc, char** argv ) {
             << "***********************************************************"
             << std::endl;
   
-  // Part 4: The run phase
+  // Part 4: The run phase:
   // * the rate of failure per faults is phi_0, obtained in the pre-run phase;
   // * the number of initial defects is initialFaults;
-  // * the Musa factor musaFactor is the product of the fault reduction factor at infinite time and the testing compression factor;
-  // * the rate of the exponential distribution lambda = phi_0 * initialFaults * exp( -phi_0 * musaFactor * t_i ) depends from the failure times t_i, so it will change after every failure;
-  // * the number of failure to be observed is observations; this is the number of random interfailure times to be produced iteratively via the test driver.
+  // * the Musa factor musaFactor:
+  //   it is the product of the fault reduction factor at infinite time
+  //   and the testing compression factor;
+  // * the rate of the exponential distribution:
+  //   lambda = phi_0 * initialFaults * exp( -phi_0 * musaFactor * t_i )
+  //   depends from the failure times t_i, so it will change after every failure;
+  // * the number of failure to be observed is observations;
+  //   this is the number of random interfailure times
+  //   to be produced iteratively via the test driver.
   double musaFactor = 0.95;
   double runTime = 0.;
   std::size_t observations = 50;
@@ -126,7 +138,7 @@ int main(  int argc, char** argv ) {
               << ": " << runTime << std::endl;
   }
 
-  // Part 5: Output
+  // Part 5: The output:
   // We create one file containing the lifetimes and the failure instants.
   std::string dumpInterfailureTimes, dumpFailureTimes;
   vectorDump( interfailureTimes, std::string( ", " ), dumpInterfailureTimes );

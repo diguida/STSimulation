@@ -1,5 +1,6 @@
 #include "../include/MIDTestDriver.h"
 #include "../include/LinearCongruentialGenerator.h"
+
 #include <functional>
 #include <iostream>
 
