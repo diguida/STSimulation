@@ -65,8 +65,7 @@ int main( int argc, char** argv ) {
   unsigned int initialFaults = 60;
   double lambda_preRun = 0.00785; //failures per hour
   std::size_t observations_preRun = 100;
-  TD testDriver_preRun{ p_stub };
-  testDriver_preRun.setRate( lambda_preRun );
+  TD testDriver_preRun{ p_stub, lambda_preRun };
   std::cout << "********************** PRE-RUN PHASE **********************\n"
             << "* Number of initial faults: " << initialFaults << "\n"
             << "* Initial (constant) rate of failures: " << lambda_preRun << " failures/h\n"
@@ -131,7 +130,7 @@ int main( int argc, char** argv ) {
   TD testDriver{ p_stub };
   for( std::size_t i = 0; i < observations; ++i ) {
     double lambda =  phi_0 * initialFaults * std::exp( -phi_0 * musaFactor * runTime );
-    testDriver.setRate( lambda );
+    testDriver.lambda( lambda );
     std::cout << "Testing the MID: running up to failure " << i + 1
               << " with failure rate " << lambda << " failures/h" << std::endl;
     double t = testDriver.callMID();

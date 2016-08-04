@@ -23,8 +23,7 @@ int main( int argc, char** argv ) {
   std::exponential_distribution<> d{ lambda };
   std::function<double()> rnd = std::bind( d, lce );
   std::shared_ptr<MS> p_stub = std::make_shared<MS>( seed );
-  TD testDriver{ p_stub };
-  testDriver.setRate( lambda );
+  TD testDriver{ p_stub, lambda };
   // first try
   for( unsigned int i = 0; i < 10; ++i ) {
     double t = testDriver.callMID();
@@ -48,7 +47,7 @@ int main( int argc, char** argv ) {
   std::cout << "*****" << std::endl;
   std::function<double()> rnd2 = std::bind( d, lce );
   TD testDriver2{ p_stub };
-  testDriver2.setRate( lambda );
+  testDriver2.lambda( lambda );
   for( unsigned int i = 0; i < 10; ++i ) {
     double t = testDriver2.callMID();
     std::cout << "Driver inter-failure time: " << t << std::endl;
@@ -64,7 +63,7 @@ int main( int argc, char** argv ) {
   std::cout << "*****" << std::endl;
   std::function<double()> rnd3 = std::bind( d, lce );
   TD testDriver3( std::make_shared<MS>( seed ) );
-  testDriver3.setRate( lambda );
+  testDriver3.lambda( lambda );
   for( unsigned int i = 0; i < 10; ++i ) {
     double t = testDriver3.callMID();
     std::cout << "Driver inter-failure time: " << t << std::endl;
@@ -76,16 +75,16 @@ int main( int argc, char** argv ) {
   std::cout << "*****" << std::endl;
   double lambda4 = lambda;
   TD testDriver4( std::make_shared<MS>( seed ) );
-  testDriver4.setRate( lambda4 );
+  testDriver4.lambda( lambda4 );
   for( unsigned int i = 0; i < 10; ++i ) {
-    std::cout << "Rate: " << testDriver4.getRate() << std::endl;
+    std::cout << "Rate: " << testDriver4.lambda() << std::endl;
     double t = testDriver4.callMID();
     std::cout << "Driver inter-failure time: " << t << std::endl;
     std::exponential_distribution<> d( lambda4 );
     double exp_r = d( lce );
     std::cout << "Random exp: " << exp_r << std::endl;
     lambda4 /= 2.;
-    testDriver4.setRate( lambda4 );
+    testDriver4.lambda( lambda4 );
     std::cout << "Rate value set to: " << lambda4 << std::endl;
   }
   
