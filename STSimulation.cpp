@@ -39,9 +39,8 @@ int main( int argc, char** argv ) {
   // * instantiation of the test stub:
   //   we use it as a service, and we enforce this
   //   by using the shared pointer interface;
-  // * instantiation of the test driver:
-  //   it will use the shared stub
-  //   to generate random numbers from the same sequence.
+  // * first bunch of generation of random numbers, in order to
+  //   reduce the dependency of the sequence from the seed.
   unsigned long long seed = 57;
   std::shared_ptr<MS> p_stub = std::make_shared<MS>( seed );
   std::cout << "************************ GENERATOR ************************\n"
@@ -51,8 +50,13 @@ int main( int argc, char** argv ) {
             << "* Input seed: " << seed << "\n"
             << "***********************************************************"
             << std::endl;
+  for(unsigned int i = 0; i < 100000; ++i)
+    p_stub->execute( 1. );
 
   // Part 2: The pre-run phase:
+  // * instantiation of the test driver:
+  //   it will use the shared stub
+  //   to generate random numbers from the same sequence;
   // * the number of initial defects is initialFaults;
   // * the lifetime has an exponential distribution with fixed rate lambda_preRun;
   // * the number of failure to be observed is observations_preRun;
@@ -94,6 +98,9 @@ int main( int argc, char** argv ) {
             << std::endl;
   
   // Part 4: The run phase:
+  // * instantiation of the test driver:
+  //   it will use the shared stub
+  //   to generate random numbers from the same sequence;
   // * the rate of failure per faults is phi_0, obtained in the pre-run phase;
   // * the number of initial defects is initialFaults;
   // * the Musa factor musaFactor:
@@ -148,7 +155,7 @@ int main( int argc, char** argv ) {
             << "* Failure times: " << dumpFailureTimes << "\n"
             << "***********************************************************"
             << std::endl;
-  std::ofstream ofs("STResults.txt");
+  std::ofstream ofs( "STResults.txt" );
   ofs << "T = " << dumpInterfailureTimes << "\nt = " << dumpFailureTimes;
   ofs.close();
   return 0;
