@@ -10,14 +10,14 @@ int main( int argc, char** argv ) {
   unsigned long long seed = 57;
   double tau = 127.;
   double lambda = 1./tau;
-  using LCE = std::linear_congruential_engine< unsigned long long,
-                                               Pars::a,
-                                               Pars::c,
-                                               Pars::m >;
-  using MS = MIDStub< unsigned long long,
-                      Pars::a,
-                      Pars::c,
-                      Pars::m >;
+  using LCE = std::linear_congruential_engine< Pars::result_type,
+                                               Pars::multiplier,
+                                               Pars::increment,
+                                               Pars::modulus >;
+  using MS = MIDStub< Pars::result_type,
+                      Pars::multiplier,
+                      Pars::increment,
+                      Pars::modulus >;
   using TD = MIDTestDriver< MS >;
   LCE lce{ seed };
   std::exponential_distribution<> d{ lambda };

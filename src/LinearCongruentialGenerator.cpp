@@ -17,8 +17,8 @@ double LinearCongruentialGenerator::random() {
 #if DEBUG
   std::cout << "[LinearCongruentialGenerator::random] starting value = " << m_x << ", ";
 #endif
-  m_x = ( Pars::a * m_x + Pars::c ) % Pars::m;
-  double r = (double) m_x/Pars::m;
+  m_x = ( Pars::multiplier * m_x + Pars::increment ) % Pars::modulus;
+  double r = (double) m_x/Pars::modulus;
 #if DEBUG
   std::cout << "x = " << m_x << ", r = " << r << std::endl;
 #endif

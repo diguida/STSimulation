@@ -10,10 +10,10 @@ using Pars = LinearCongruentialGeneratorParameters;
 int main( int argc, char** argv ) {
   unsigned long long seed = 57;
   LinearCongruentialGenerator lcg( seed ), lcg1( seed ), lcg2( seed ), lcg3( seed );
-  using MS = MIDStub< unsigned long long,
-                      Pars::a,
-                      Pars::c,
-                      Pars::m >;
+  using MS = MIDStub< Pars::result_type,
+                      Pars::multiplier,
+                      Pars::increment,
+                      Pars::modulus >;
   std::shared_ptr<MS> p_stub = std::make_shared<MS>( seed );
   double tau = 127.;
   double lambda = 1./tau;

@@ -10,10 +10,10 @@
 #include <vector>
 
 using Pars = LinearCongruentialGeneratorParameters;
-using MS = MIDStub< unsigned long long,
-                    Pars::a,
-                    Pars::c,
-                    Pars::m >;
+using MS = MIDStub< Pars::result_type,
+                    Pars::multiplier,
+                    Pars::increment,
+                    Pars::modulus >;
 using TD = MIDTestDriver< MS >;
 
 template< class T >
@@ -72,9 +72,9 @@ int main( int argc, char** argv ) {
   constexpr unsigned int setupGenerations = 100000;
   std::shared_ptr<MS> p_stub = std::make_shared<MS>( seed );
   std::cout << "************************ GENERATOR ************************\n"
-            << "* Modulus: " << Pars::m << "\n"
-            << "* Multiplier: " << Pars::a << "\n"
-            << "* Increment: " << Pars::c << "\n"
+            << "* Multiplier: " << Pars::multiplier << "\n"
+            << "* Increment: " << Pars::increment << "\n"
+            << "* Modulus: " << Pars::modulus << "\n"
             << "* Input seed: " << seed << "\n"
             << "***********************************************************"
             << std::endl;
