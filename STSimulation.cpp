@@ -31,6 +31,32 @@ static void vectorDump( T const & vec, std::string const & delimiter, std::strin
 }
 
 int main( int argc, char** argv ) {
+  // Part 0: Input values:
+  // * seed for the generator,
+  // * number of initial faults,
+  // * (constant) failure rate in the pre-run phase (failure/h),
+  // * number of failures to be observed in the pre-run phase,
+  // * number of failures to be observed in the run phase.
+  // * Musa factor A.
+  unsigned long long seed; //57245;
+  unsigned int initialFaults; //60;
+  double lambda_preRun; //0.00785; //failures per hour
+  std::size_t observations_preRun; //100;
+  std::size_t observations; //50;
+  double musaFactor; //0.95;
+  std::cout << "Enter seed: ";
+  std::cin >> seed;
+  std::cout << "Enter the number of initial faults: ";
+  std::cin >> initialFaults;
+  std::cout << "Enter the (constant) failure rate in the pre-run phase (failure/h): ";
+  std::cin >> lambda_preRun;
+  std::cout << "Enter the number of failures to be observed in the pre-run phase: ";
+  std::cin >> observations_preRun;
+  std::cout << "Enter the number of failures to be observed in the run phase: ";
+  std::cin >> observations;
+  std::cout << "Enter the Musa factor A: ";
+  std::cin >> musaFactor;
+
   // Part 1: The set up of the simulation:
   // * definition of the Linear Congruential Generator:
   //   We use the modulus, the multiplier, and the increment as declared
@@ -39,9 +65,11 @@ int main( int argc, char** argv ) {
   // * instantiation of the test stub:
   //   we use it as a service, and we enforce this
   //   by using the shared pointer interface;
+  // * creation of the output file: it contains the seed and the number of
+  //   pre-run and run iterations in the name.
   // * first bunch of generation of random numbers, in order to
   //   reduce the dependency of the sequence from the seed.
-  unsigned long long seed = 57;
+  constexpr unsigned int setupGenerations = 100000;
   std::shared_ptr<MS> p_stub = std::make_shared<MS>( seed );
   std::cout << "************************ GENERATOR ************************\n"
             << "* Modulus: " << Pars::m << "\n"
@@ -50,7 +78,16 @@ int main( int argc, char** argv ) {
             << "* Input seed: " << seed << "\n"
             << "***********************************************************"
             << std::endl;
-  for(unsigned int i = 0; i < 100000; ++i)
+  std::ostringstream fileNameSS;
+  fileNameSS << std::string( "STResults" )
+             << std::string( "_" ) << std::string( "seed" ) << seed
+             << std::string( "_" ) << std::string( "faults" ) << initialFaults
+             << std::string( "_" ) << std::string( "failrate" ) << lambda_preRun
+             << std::string( "_" ) << std::string( "prerun" ) << observations_preRun
+             << std::string( "_" ) << std::string( "run" ) << observations
+             << std::string( "_" ) << std::string( "A" ) << musaFactor
+             << std::string( ".txt" );
+  for(unsigned int i = 0; i < setupGenerations; ++i)
     p_stub->execute( 1. );
 
   // Part 2: The pre-run phase:
@@ -62,9 +99,6 @@ int main( int argc, char** argv ) {
   // * the number of failure to be observed is observations_preRun;
   //   this is the number of random interfailure times
   //   to be produced iteratively via the test driver.
-  unsigned int initialFaults = 60;
-  double lambda_preRun = 0.00785; //failures per hour
-  std::size_t observations_preRun = 100;
   TD testDriver_preRun{ p_stub, lambda_preRun };
   std::cout << "********************** PRE-RUN PHASE **********************\n"
             << "* Number of initial faults: " << initialFaults << "\n"
@@ -83,7 +117,6 @@ int main( int argc, char** argv ) {
     std::cout << "Time spent in executing the MID till failure " << i + 1
               << ": " << preRunTime << std::endl;
   }
-  std::cout << "Total time spent in the pre-run phase: " << preRunTime << " hours." << std::endl;
 
   // Part 3: The computation of the rate of failure per faults:
   // ratio between the number of observed failure in the pre-run phase
@@ -111,9 +144,7 @@ int main( int argc, char** argv ) {
   // * the number of failure to be observed is observations;
   //   this is the number of random interfailure times
   //   to be produced iteratively via the test driver.
-  double musaFactor = 0.95;
   double runTime = 0.;
-  std::size_t observations = 50;
   std::vector<double> interfailureTimes, failureTimes;
   interfailureTimes.reserve( observations );
   // we reserve an element more in the vector of the failure times
@@ -124,7 +155,7 @@ int main( int argc, char** argv ) {
             << "* Number of initial faults: " << initialFaults << "\n"
             << "* Musa factor: " << musaFactor << "\n"
             << "* Initial rate of failures: " << phi_0 * initialFaults << " failures/h\n"
-            << "* Number of failures to be observed: " << observations_preRun <<"\n"
+            << "* Number of failures to be observed: " << observations <<"\n"
             << "***********************************************************"
             << std::endl;
   TD testDriver{ p_stub };
@@ -154,8 +185,12 @@ int main( int argc, char** argv ) {
             << "* Failure times: " << dumpFailureTimes << "\n"
             << "***********************************************************"
             << std::endl;
-  std::ofstream ofs( "STResults.txt" );
-  ofs << "T = " << dumpInterfailureTimes << "\nt = " << dumpFailureTimes;
+  std::ofstream ofs( fileNameSS.str() );
+  ofs << "N0 = " << initialFaults << ";\n"
+      << "phi0 = " << phi_0 << ";\n"
+      << "A = " << musaFactor << ";\n"
+      << "T = List" << dumpInterfailureTimes << ";\n"
+      << "t = List" << dumpFailureTimes << ";";
   ofs.close();
   return 0;
 }
