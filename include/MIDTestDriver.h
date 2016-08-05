@@ -14,7 +14,6 @@
  * In this way, it enforces the sharing of the same random number sequence
  * by all the instances of the driver constructed from the same pointer.
  */
-
 template < typename _Stub, typename _RealType = double >
 class MIDTestDriver {
 public:

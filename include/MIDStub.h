@@ -16,7 +16,6 @@
  * At every access, a random interfailure time with exponential distribution
  * is generated. The rate is passed as argument in the call.
  */
-
 template < typename _UIntType, _UIntType __a, _UIntType __c, _UIntType __m >
 class MIDStub {
   /** The type of the random number engine, as in the random library of the STL. */
